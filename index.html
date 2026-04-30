@@ -2222,6 +2222,67 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────
+
+// ── EXPOSE TO WINDOW (required for onclick handlers in ES module) ────────────────
+window.addUserRole = addUserRole;
+window.bulkBaja = bulkBaja;
+window.bulkCambiarCategoria = bulkCambiarCategoria;
+window.bulkEnviarMensaje = bulkEnviarMensaje;
+window.bulkMarcarPago = bulkMarcarPago;
+window.changeRole = changeRole;
+window.clearAllMsg = clearAllMsg;
+window.clearSelection = clearSelection;
+window.closeModal = closeModal;
+window.confirmarBaja = confirmarBaja;
+window.confirmarBulkCat = confirmarBulkCat;
+window.confirmarImport = confirmarImport;
+window.descargarPlantilla = descargarPlantilla;
+window.doLogin = doLogin;
+window.ejecutarCambioCat = ejecutarCambioCat;
+window.enviarMensajes = enviarMensajes;
+window.enviarMsgSingle = enviarMsgSingle;
+window.exportCSV = exportCSV;
+window.exportMorosos = exportMorosos;
+window.importCSV = importCSV;
+window.loadTemplate = loadTemplate;
+window.logout = logout;
+window.marcarPagoBulk = marcarPagoBulk;
+window.marcarPagoIndividual = marcarPagoIndividual;
+window.openBaja = openBaja;
+window.openModalSocio = openModalSocio;
+window.openMsgSingle = openMsgSingle;
+window.prevBulkCat = prevBulkCat;
+window.reactivarSocio = reactivarSocio;
+window.renderBajas = renderBajas;
+window.renderEstadisticas = renderEstadisticas;
+window.renderImportar = renderImportar;
+window.renderMorosos = renderMorosos;
+window.renderMsgDest = renderMsgDest;
+window.renderPagos = renderPagos;
+window.renderSocios = renderSocios;
+window.renderUsuarios = renderUsuarios;
+window.saveSocio = saveSocio;
+window.selectAllMsg = selectAllMsg;
+window.setCuota = setCuota;
+window.showPage = showPage;
+window.sortSocios = sortSocios;
+window.toggleAll = toggleAll;
+window.toggleCemlaField = toggleCemlaField;
+window.toggleModalidadFields = toggleModalidadFields;
+window.toggleMsgSel = toggleMsgSel;
+window.toggleSelect = toggleSelect;
+
+// Aliases for HTML references
+window.openModalUsuario = () => document.getElementById('modal-usuario')?.classList.add('open');
+window.saveUsuario      = addUserRole;
+window.toggleCemla      = toggleCemlaField;
+window.marcarPagoBulk   = marcarPagoBulk;
+window.loadTemplateSingle = function() {
+  const t   = document.getElementById('msg-single-template')?.value;
+  const txt = document.getElementById('msg-single-texto');
+  if (txt) txt.value = TEMPLATES[t] || '';
+};
+
 window.addEventListener('load', () => {
   initCatFilters();
   loadTemplate();
