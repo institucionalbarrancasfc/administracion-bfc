@@ -653,10 +653,32 @@ textarea{resize:vertical;}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="card">
           <div class="card-title">Importar socios desde CSV</div>
+
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6">
+              Descargá la plantilla oficial con las 38 columnas del sistema. Completá los datos y luego importá el archivo.
+            </div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:12px;font-size:10.5px;color:var(--text3);font-family:'DM Mono',monospace;line-height:1.9;overflow-x:auto">
+              DNI &middot; APELLIDO &middot; NOMBRES &middot; FECHA DE NACIMIENTO &middot; PROVINCIA DE NACIMIENTO<br>
+              NUMERO DE TELEFONO PERSONAL &middot; MAIL PERSONAL &middot; NACIONALIDAD &middot; DOMICILIO<br>
+              Tenes alguna otra nacionalidad o ciudadan&iacute;a? &middot; CIUDAD<br>
+              NOMBRE Y APELLIDO DEL CONTACTO DE EMERGENCIA &middot; PARENTESCO<br>
+              NUMERO DE TELEFONO DEL CONTACTO DE EMERGENCIA &middot; MAIL DEL CONTACTO DE EMERGENCIA<br>
+              Mail de contacto (notificaciones del club)<br>
+              Ten&eacute;s Obra Social? &middot; Si ten&eacute;s Obra Social, cual? &middot; Numero de Afiliado &middot; Plan<br>
+              ESTADO EDUCATIVO &middot; NOMBRE DEL COLEGIO &middot; TURNO &middot; HORARIO DE INICIO<br>
+              HORARIO DE FINALIZACI&Oacute;N - MARTES &middot; MIERCOLES &middot; JUEVES &middot; VIERNES<br>
+              <span style="color:var(--red-h)">CATEGORIA &middot; TIPO &middot; MODALIDAD &middot; MONTO CONVENIO &middot; ULTIMO MES ABONADO</span><br>
+              <span style="color:var(--red-h)">FICHADO EN COMET &middot; CEMLA &middot; FECHA CEMLA &middot; PAGO INDUMENTARIA &middot; OBSERVACIONES</span>
+            </div>
+            <button class="btn btn-secondary" onclick="descargarPlantilla()" style="margin-bottom:16px">
+              Descargar plantilla CSV (38 columnas)
+            </button>
+          </div>
+
           <div class="import-zone" onclick="document.getElementById('csv-input').click()">
-            <div class="icon"></div>
-            <div style="font-size:13px;margin-bottom:6px">Hacé clic para seleccionar un archivo CSV</div>
-            <div style="font-size:11px">Columnas esperadas: dni, apellido, nombre, categoria, telefono, mail</div>
+            <div style="font-size:13px;margin-bottom:6px;color:var(--text2)">Seleccionar archivo CSV para importar</div>
+            <div style="font-size:11px">El archivo debe tener los encabezados exactos de la plantilla</div>
           </div>
           <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="importCSV(this)">
           <div id="import-preview" style="margin-top:12px"></div>
@@ -2055,7 +2077,8 @@ async function ejecutarCambioCat() {
 }
 
 // ── CSV TEMPLATE & IMPORT ─────────────────────────────────────────────
-const TEMPLATE_COLS = ["DNI","APELLIDO","NOMBRES","FECHA DE NACIMIENTO","PROVINCIA DE NACIMIENTO",
+const TEMPLATE_COLS = [
+  "DNI","APELLIDO","NOMBRES","FECHA DE NACIMIENTO","PROVINCIA DE NACIMIENTO",
   "NUMERO DE TELEFONO PERSONAL","MAIL PERSONAL","NACIONALIDAD","DOMICILIO",
   "Tenes alguna otra nacionalidad o ciudadan\u00eda?","CIUDAD",
   "NOMBRE Y APELLIDO DEL CONTACTO DE EMERGENCIA","PARENTESCO",
@@ -2064,7 +2087,10 @@ const TEMPLATE_COLS = ["DNI","APELLIDO","NOMBRES","FECHA DE NACIMIENTO","PROVINC
   "Ten\u00e9s Obra Social?","Si ten\u00e9s Obra Social, cual?","Numero de Afiliado","Plan",
   "ESTADO EDUCATIVO","NOMBRE DEL COLEGIO","TURNO","HORARIO DE INICIO",
   "HORARIO DE FINALIZACI\u00d3N - MARTES","HORARIO DE FINALIZACI\u00d3N - MIERCOLES",
-  "HORARIO DE FINALIZACI\u00d3N - JUEVES","HORARIO DE FINALIZACI\u00d3N - VIERNES"];
+  "HORARIO DE FINALIZACI\u00d3N - JUEVES","HORARIO DE FINALIZACI\u00d3N - VIERNES",
+  "CATEGORIA","TIPO","MODALIDAD","MONTO CONVENIO","ULTIMO MES ABONADO",
+  "FICHADO EN COMET","CEMLA","FECHA CEMLA","PAGO INDUMENTARIA","OBSERVACIONES"
+];
 
 const TEMPLATE_MAP = {
   "DNI":"dni","APELLIDO":"apellido","NOMBRES":"nombre","FECHA DE NACIMIENTO":"fnac",
@@ -2083,7 +2109,12 @@ const TEMPLATE_MAP = {
   "HORARIO DE FINALIZACI\u00d3N - MARTES":"edu_fin_mar",
   "HORARIO DE FINALIZACI\u00d3N - MIERCOLES":"edu_fin_mie",
   "HORARIO DE FINALIZACI\u00d3N - JUEVES":"edu_fin_jue",
-  "HORARIO DE FINALIZACI\u00d3N - VIERNES":"edu_fin_vie"
+  "HORARIO DE FINALIZACI\u00d3N - VIERNES":"edu_fin_vie",
+  "CATEGORIA":"categoria","TIPO":"tipo","MODALIDAD":"modalidad",
+  "MONTO CONVENIO":"conv_monto","ULTIMO MES ABONADO":"ultimo_mes",
+  "FICHADO EN COMET":"_comet_str","CEMLA":"_cemla_str",
+  "FECHA CEMLA":"cemla_fecha","PAGO INDUMENTARIA":"_indum_str",
+  "OBSERVACIONES":"obs"
 };
 
 function descargarPlantilla() {
@@ -2092,7 +2123,8 @@ function descargarPlantilla() {
     '+54 11 1234-5678','juan@mail.com','Argentina','Av. Corrientes 1234',
     'Italiana','Buenos Aires','María García','Madre','+54 11 9876-5432',
     'madre@mail.com','juan@mail.com','si','OSDE','123456','310',
-    'secundaria','Colegio Nacional','tarde','14:00','18:00','18:00','18:00','18:00']
+    'secundaria','Colegio Nacional','tarde','14:00','18:00','18:00','18:00','18:00',
+    '4ta (2006/07)','jugador','normal','','2026-04','NO','NO','','NO','']
     .map(v => '"' + v + '"').join(',');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['\uFEFF' + header + '\n' + sample], {type:'text/csv;charset=utf-8'}));
@@ -2117,6 +2149,17 @@ function importCSV(input) {
       cols.forEach((f, j) => { if (f) obj[f] = vals[j] || ''; });
       if (obj.apellido) { obj.apellido = obj.apellido.toUpperCase(); imported.push(obj); }
     }
+    // Convert SI/NO string fields to booleans
+    imported.forEach(obj => {
+      if ('_comet_str' in obj) { obj.comet = obj._comet_str.toUpperCase()==='SI'; delete obj._comet_str; }
+      if ('_cemla_str'  in obj) { obj.cemla = obj._cemla_str.toUpperCase()==='SI';  delete obj._cemla_str; }
+      if ('_indum_str'  in obj) { obj.indum = obj._indum_str.toUpperCase()==='SI';  delete obj._indum_str; }
+      // Normalize modalidad
+      const mod = (obj.modalidad||'').toLowerCase();
+      if (mod.includes('beca'))     obj.modalidad = 'beca';
+      else if (mod.includes('conv')) obj.modalidad = 'convenio';
+      else                           obj.modalidad = 'normal';
+    });
     window._pendingImport = imported;
     const prev = document.getElementById('import-preview');
     if (!prev) return;
